@@ -1,0 +1,171 @@
+---
+title: "Untitled"
+author: "DuraiSundaramoorthi"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Demo: Vector
+## Code Chunk 1
+## Multiple ways to innitialize an empty vector
+```{r}
+u = vector("numeric",length = 3) # an empty numeric vector of length 3
+u
+v = numeric(5) # an empty numeric vector of length 5
+v
+w = vector("character", length = 4) # an empty character vector of length 4
+w
+z = character(2) # an empty character vector of length 2
+z
+```
+
+
+## Code Chunk 2
+## use c() to construct a vector with values
+## Examine the vectors
+```{r echo = TRUE}
+x = c(1,2,3,4)  #numeric vector
+x
+length(x)
+class(x)
+
+y = c("1","2","hello","R") #character vector
+y
+length(y)
+class(y)
+```
+
+
+## Code Chunk 3
+## Adding Elements to existing vector
+```{r}
+x
+x = c(x,5) # add a new element to x
+x
+```
+
+
+## Code Chunk 4
+## Homogenous data type
+```{r}
+c(1,"hello",TRUE)   # every element will be transformed to character, as there are  " " around 1 and TRUE
+```
+
+
+## Code Chunk 5
+## Constructing numeric vectors of specific structure
+
+```{r}
+a = 3:7 ## Use a:b to denote the starting point a and ending point b and create continous sequence
+a
+
+b = seq(from = 1, to = 9, by = 2) # sequence of numbers from 1 to 9 incremented by 2
+b
+
+c = rep(3,4)  # replicate 3 for 4 times
+c
+```
+
+
+## Code Chunk 6
+## Some functions for numeric vectors & vector calculation
+```{r}
+x 
+class(x)  # x is a numeric vector
+
+length(x)  # return the length of x
+
+sd(x)  # return the standard deviation of x
+
+min(x)  # return the minimal of x
+
+max(x)  # return the maximal of x
+```
+
+## Code Chunk 7
+## Overwritten
+```{r}
+x+1 # add 1 on each element
+exp(x)  # take expoential on each element
+x[1] + 10 # add 1 on the first element
+x[1] # x[1] is not overwritten
+x[1] = x[1]+10  # x[1] is overwritten
+x[1]
+```
+
+
+
+## Code Chunk 8
+## Accesing data from numeric or character vectors
+## For vector, each element has a position, which positions you want to access?
+## use [n] to denote the position n you want to access
+## use [1:3] to specify the starting position and ending position
+# use [c(1,3)] to specify separate positions
+# use [-n] to show all the elements except n
+
+```{r}
+x
+
+x[1] # returns the first element
+
+x[1:3] # returns elements 1 to 3
+
+x[c(1,3)] # returns elements 1 and 3
+
+x[-3] #returns everything but the third element
+```
+
+## Code Chunk 9
+## Data Type Coercion: Class really matters!
+## mean() only works for numeric, does not work on character
+
+```{r}
+z = c("1","2","3") # create a character vector
+
+class(z)
+
+mean(z)  # cannot calculate mean
+
+is.numeric(z)  # check whether it is numeric
+
+z = as.numeric(z)  # transform data type
+
+z
+
+mean(z) #now we can calculate mean
+
+z = as.character(z)
+
+z
+```
+
+## Code Chunk 10
+## Missing Values in Vector
+
+## In R, missing values are represented by the string NA
+## Any computation involving a NA will return a NA
+## Use is.na() to test whether every element 
+## Use anyNA() to test whether a vector contains a NA 
+## na.rm = TRUE is an argument in many stat function to remove NA values when computing
+
+```{r}
+x = c(1,4,7,NA,12,19,15,21,20)
+
+mean(x) # cannot calculate mean because of NA among the elements
+
+is.na(x) 
+
+anyNA(x)
+
+mean(x,na.rm = TRUE)  # remove NA from x, then calculate the mean()
+```

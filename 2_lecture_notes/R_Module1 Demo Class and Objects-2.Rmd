@@ -1,0 +1,104 @@
+---
+title: "Untitled"
+author: "DuraiSundaramoorthi"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Demo: Class and Objects
+## Code Chunk 1
+## Assign value to object
+```{r echo = TRUE}
+x1 = 0.02  #assign values to object with =
+y1 <- "0.01" #assign values to object with <-
+z1 = TRUE
+```
+
+## Code Chunk 2
+## Use class() function
+```{r}
+class(x1) 
+class(y1)
+class(z1)
+```
+
+## Code Chunk 3
+## Case sensitive
+```{r}
+X1 = 100  #Case sensitive x1 is not same as X1
+X1
+x1        # original value of x1 = 0.02
+```
+
+## Code Chunk 4
+## Naming an object
+```{r error=TRUE}
+1x = 200  # name should not start with number
+```
+
+## Code Chunk 5
+## Overwritten
+```{r}
+x1  # original value of x1 = 0.02
+x1 + 5  # + is for numeric class
+x1 # x1 is not overwritten
+x1 = x1 + 5  # x1 is overwritten
+x1 # x1 has a new value
+```
+
+## Code Chunk 6
+## Class-specific operators
+```{r}
+class("TRUE")
+"TRUE" + 1
+class(TRUE)
+TRUE + 1
+2 + "2"  
+```
+
+## Use save() function to save the objects 
+## Multiple R objects could be stored into one RData file
+## When to save R objects?
+## Export for sharing/future reference
+## Save a copy of important things in case R Crashes(which is very likely to happen)
+## save(obj1,obj2,...,file="file_name.RData")
+
+## Code Chunk 7
+## Save Your Objects
+```{r}
+Prior = c(0.3,0.2,0.5)
+Likelihood = c(0.01, 0.03, 0.02)
+
+save(Prior,Likelihood,file="probabilities.RData")
+```
+
+
+
+## Code Chunk 8
+## first remove the two objects
+```{r,eval=FALSE}
+rm(Prior,Likelihood) # let's first remove the two stored objects from the environment
+Prior #object is removed, R returned error message
+Likelihood #object is removed, R returned error message
+```
+
+
+
+## Code Chunk 9
+## load the RData file back
+## Use load() function to load RData file into current environment
+```{r}
+load("probabilities.RData") # load the stored data back
+Prior
+Likelihood
+```
+

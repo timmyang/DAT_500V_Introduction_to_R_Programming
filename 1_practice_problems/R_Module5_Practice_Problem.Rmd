@@ -1,0 +1,195 @@
+---
+title: "R_Module5_Practice_Problem"
+output: html_document
+date: '2022-08-20'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## R-Class Module 5 Practice Problem 1
+
+#### 1. Construct a function c_to_f(): Convert Celsius to Fahrenheit
+* Input: Celsius
+* Statement: Fahrenheit = Celsius*1.8+32
+* Output: Fahrenheit
+```{r}
+c_to_f = function(Celsius) {
+        Fahrenheit = Celsius * 1.8 + 32
+        return(Fahrenheit)
+}
+```
+
+#### 2. Convert 26 Celsius to Fahrenheit
+```{r}
+c_to_f(26)
+```
+
+
+## R-Class Module 5 Practice Problem 2
+
+#### 1. Download the data file from 
+https://www.dropbox.com/s/yy64i1ekeoo9wga/nyc_flights.csv?dl=0
+(CSV) 
+https://www.dropbox.com/s/4hj71qxh1a8r23e/nyc_flights.RData?dl=0 
+(RData)
+
+#### 2. Import nyc_flights.csv to the R environment, save as a data.frame “flights”
+
+```{r}
+flights <- read.csv("/Users/hyeonwooyang/Desktop/Desktop/0_WUSTL/0_Business_Analytics/02_pre_coursework/01_Intro_to_R_Programming/Project/My_R_Project/data/nyc_flights.csv")
+```
+
+#### 3. Write your code to answer the following question  
+How many flights are observed?
+```{r}
+nrow(flights)
+```
+How many flights are observed each month?
+```{r}
+table(flights$month)
+```
+What is the maximum dep_delay(departure delay time)?
+```{r}
+# install.packages("dplyr")
+library(dplyr)
+
+summarise(flights, max(dep_delay, na.rm = TRUE))
+```
+What is the maximum air_time?
+```{r}
+summarise(flights, max(air_time, na.rm = TRUE))
+```
+
+#### 4. Create a new object flights_sample with the first 1000 rows of flights
+```{r}
+flights_sample <- flights[1:1000, ]
+```
+
+#### 5. Save the flights_sample to a RData file “flights_sample.RData”
+```{r}
+save(flights_sample, file = "flights_sample.RData")
+```
+
+#### 6. Remove the object flights_sample from the environment.
+```{r}
+rm(flights_sample)
+```
+
+#### 7. Load the object flights_sample from the RData file. 
+```{r}
+load("flights_sample.RData")
+```
+
+
+## R-Class Module 5 Practice Problem 3
+
+#### 1. Create a new data.frame “flights_1” with the month, day, origin, dest, air_time columns from flights
+```{r}
+flights_1 <- select(flights, month, day, origin, dest, air_time)
+```
+
+#### 2. Order “flights_1” by ascending air_time
+```{r}
+flights_1 <- arrange(flights_1, air_time)
+```
+
+#### 3. Print the first 10 rows of “flights_1”
+```{r}
+flights_1[1:10, ]
+```
+
+#### 4. Calculate the average air_time for all the flights whose origin is LGA on January 1st
+```{r}
+filter(flights_1, month == 1, day == 1, origin == "LGA") %>%
+        summarise(mean(air_time, na.rm = TRUE))
+```
+
+## R-Class Module 5 Practice Problem 4
+
+#### 1. Group the flights by route: origin+dest
+```{r}
+flights %>%
+        group_by(origin, dest)
+```
+#### 2. Calculate  the  total  number  of  flights,  average  dep_delay,  average arr_delay for each route
+```{r}
+flights %>%
+        group_by(origin, dest) %>%
+        summarise(flights = n(),
+                  avg_dep_delay = mean(dep_delay, na.rm = TRUE),
+                  avg_arr_delay = mean(arr_delay, na.rm = TRUE))
+```
+#### 3. Order the return by descending avearge dep_delay time
+```{r}
+flights %>%
+        group_by(origin, dest) %>%
+        summarise(flights = n(),
+                  avg_dep_delay = mean(dep_delay, na.rm = TRUE),
+                  avg_arr_delay = mean(arr_delay, na.rm = TRUE)) %>%
+        arrange(desc(avg_dep_delay))
+```
+
+#### 4. Group the flights by carrier
+```{r}
+flights %>%
+        group_by(carrier)
+```
+#### 5. Calculate  the  total  number  of  flights,average  dep_delay,  average arr_delay, total distance covered for each carrier
+```{r}
+flights %>%
+        group_by(carrier) %>%
+        summarise(flights = n(),
+                  avg_dep_delay = mean(dep_delay, na.rm = TRUE),
+                  avg_arr_delay = mean(arr_delay, na.rm = TRUE),
+                  total_distance = sum(distance)
+                  )
+```
+#### 6. Order the return with descending avg_arr_delay
+```{r}
+flights %>%
+        group_by(carrier) %>%
+        summarise(flights = n(),
+                  avg_dep_delay = mean(dep_delay, na.rm = TRUE),
+                  avg_arr_delay = mean(arr_delay, na.rm = TRUE),
+                  total_distance = sum(distance)
+                  ) %>%
+        arrange(desc(avg_arr_delay))
+```
+
+
+
+## R-Class Module 5 Practice Problem 5
+
+#### Plot barplot with ggplot
+#### 1. A bar plot on count of flights for each weekday
+```{r}
+# install.packages("lubridate")
+library(lubridate)
+# install.packages("ggplot2")
+library(ggplot2)
+
+flights$weekday = weekdays(ymd_hms(flights$time_hour))
+
+ggplot(flights) + geom_bar(aes(x = weekday))
+```
+#### 2. A  colored  bar  plot  on  count  of  flights  for  each  weekday  from  each origin
+```{r}
+ggplot(flights) + geom_bar(aes(x = weekday, fill = origin))
+```
+#### 3. Add a titile “Weekday Flights From Each NYC Airport” to your plot 
+```{r}
+ggplot(flights) + geom_bar(aes(x = weekday, fill = origin)) + labs(title = "Weekday Flights From Each NYC Airport")
+```
+
+#### Plot scatter point plot with ggplot
+#### 4. A scatter plot on distance for each airport
+
+#### 5. X axis is origin
+
+#### 6. Y axis is distance
+```{r}
+ggplot(flights) + geom_point(aes(x = origin, y = distance))
+```

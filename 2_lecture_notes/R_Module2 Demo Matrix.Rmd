@@ -1,0 +1,210 @@
+---
+title: "Untitled"
+author: "DuraiSundaramoorthi"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Demo: constructing a matrix
+## Code Chunk 1
+## Filling by column
+```{r}
+matrix(data=1:6,nrow = 3,ncol = 2) # Filling a matrix by column
+```
+
+
+## Code Chunk 2
+## Filling by row
+```{r}
+matrix(data=1:6,nrow = 3,ncol = 2,byrow=TRUE) # Filling a matrix by row
+```
+
+
+## Code Chunk 3
+## cbind() - combine vectors by column
+```{r}
+a1 = 1:3
+a2 = 4:6
+cbind(a1,a2) # combine vectors by column
+```
+
+
+## Code Chunk 4
+## cbind() - shorter vector is recycled
+```{r}
+a1 = 1:6
+a2 = 4:5  # what if a1 and a2 has different length
+cbind(a1,a2) ##shorter vector will be recycled to achieve the length
+```
+
+
+## Code Chunk 5
+## rbind() - combine vectors by rows
+```{r}
+a1 = 1:3
+a2 = 4:6
+rbind(a1,a2) ## rbind() combine vectors by rows
+```
+
+
+## Code Chunk 6
+## Matrix only accepts values of same class, if not, R will automatically coerce
+```{r}
+matrix(c(1,2,3,"4",5,"hello"),nrow = 3,ncol = 2) # matrix() will coerce everything to character
+```
+
+
+
+## Code Chunk 7
+## Dimensions check
+```{r}
+a = matrix(data=1:6,nrow = 3,ncol = 2)
+nrow(a) #return the row dimension
+ncol(a) #return the col dimension
+dim(a)  #return row,col
+```
+
+
+
+## Code Chunk 8
+## Accesing data from matrix objects
+## access or assign data to a matrix object with "[row_index,column_index]"
+```{r}
+a[1,1] # access the first cell
+```
+
+## Code Chunk 9
+## Accesing data from matrix objects
+## [row_index,] will return the whole row
+```{r}
+a[1,] # access the first row
+```
+
+
+## Code Chunk 10
+## Accesing data from matrix objects
+## [,column_index] will return the whole column
+```{r}
+a[,2] # access the second column
+```
+
+## Code Chunk 11
+## Accesing data from matrix objects
+## use ":" to denote consecutive rows,columns
+```{r}
+a[1:2,1:2] # access the top 2 rows and columns
+```
+
+
+## Code Chunk 12
+## Scalar & Matrix Calculations 
+```{r}
+a
+
+a+1  # add 1 to each element of the matrix
+
+a*2  # multiply 2 to each element of the matrix
+```
+
+## Code Chunk 13
+## Elementwise Matrix Calculations 
+## Matrix & Matrix Element-wise Addition/Subtraction
+## Numeric operator between elements
+## Same dimensions  
+```{r}
+a + a  #Same Dimensions; element-wise addition
+a - a  # element-wise subtraction
+```
+
+## Code Chunk 14
+## Two matrice should have the same dimension
+```{r}
+b = matrix(1:6,nrow=2,ncol=3)
+a
+b
+a+b
+```
+
+
+## Code Chunk 15
+## Two matrice should have the same dimension
+```{r}
+a
+a * a #Element wise multiplication
+```
+
+
+
+## Code Chunk 16
+## Transpose
+```{r}
+a
+dim(a) # 3*2 matrix
+
+t(a)  # Transpose a matrix 
+dim(t(a)) #2*3 matrix
+```
+
+## Code Chunk 17
+## Matrix algebric multiplication
+```{r}
+a   # 3*2 dimension
+
+t(a)  # 2*3 dimension
+
+a %*% t(a) # Matrix Algebric Multiplication with %*%. Result is 3*3 dimension
+
+t(a) %*% a #result is 2*2 dimension
+```
+
+## Code Chunk 18
+## Importance of Matrix dimensions 
+## Element-wise operation needs two matrices of same dimension
+
+```{r}
+a   # 3*2
+
+t(a) # 2*3
+
+a + t(a) # a and t(a) have different dimensions
+```
+
+
+## Code Chunk 19
+## Importance of Matrix dimensions 
+## Matrix mutiplication needs a n*m , m*p matrix
+```{r}
+a   # 3*2
+a %*% a  
+```
+
+## Code Chunk 20
+## Functions on Matrix
+```{r}
+a
+
+sum(a) # sum of every elements
+
+mean(a) # mean of all the elements
+```
+
+
+## Code Chunk 21
+## Functions on row/column
+```{r}
+a
+
+apply(a,MARGIN = 1,sum)  # caculate sum of each row
+
+apply(a,MARGIN = 2,mean) # mean of each column
+```
+

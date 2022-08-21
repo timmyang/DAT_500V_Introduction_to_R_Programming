@@ -1,0 +1,59 @@
+---
+title: "R_Module1_Practice_Problem"
+output: html_document
+date: '2022-08-16'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R-Module 1 Module 1 Practice Problem
+
+#### 1. Create an object U to assign 5 to it.
+
+```{r}
+U <- 5
+U
+```
+
+#### 2. Create an object V to assign TRUE to it.
+
+```{r}
+V <- TRUE
+V
+```
+
+
+#### 3. Create an object X to assign “5” to it.
+
+```{r}
+X <- "5"
+X
+```
+
+#### 4. Create an object Y to assign “TRUE” to it.
+
+```{r}
+Y <- "TRUE"
+```
+
+#### 5. Add 1 to U, V, X, and Y.
+
+```{r}
+U + 1
+V + 1
+# X + 1
+# Y + 1
+```
+
+- Throws an error out, because "character" + "numeric" is not possible
+
+#### 6. Check class of U, V, X, and Y.
+
+```{r}
+class(U)
+class(V)
+class(X)
+class(Y)
+```

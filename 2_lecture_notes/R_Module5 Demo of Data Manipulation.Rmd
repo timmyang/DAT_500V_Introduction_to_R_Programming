@@ -1,0 +1,308 @@
+---
+title: "Data Manipulation"
+author: "DuraiSundaramoorthi"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Code Chunk 1
+## R packages
+## Install the packages
+```{r,results='hide', message=FALSE, warning=FALSE,eval=FALSE}
+mypackages = c("dplyr","lubridate","ggplot2")
+install.packages(mypackages)
+```
+
+
+## Code Chunk 2
+## Load the Packages into current session
+```{r,results='hide', message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+```
+
+
+## Code Chunk 3
+## Data manipulation with dplyr
+## Use the flights dataset
+## This dataset contains all 336776 flights that departed from New York City in 2013
+```{r}
+flights = read.csv("/Users/hyeonwooyang/Desktop/Desktop/0_WUSTL/0_Business_Analytics/02_pre_coursework/01_Intro_to_R_Programming/Project/My_R_Project/data/nyc_flights.csv")
+head(flights) # use head() to see the top rows of the data
+```
+
+
+## Code Chunk 4 
+```{r}
+dim(flights) # use dim() to see the dimensions of the data
+```
+
+
+## Code Chunk 5 
+## Data Manipulation: Filter
+## Filter rows with filter(data, requirement 1, requirement 2)
+## Suppose you want to get all the flights departing at January 1st
+```{r}
+filter(flights, month == 1, day == 1)
+```
+
+
+## Code Chunk 6
+## Difference between "==" & "="
+## a==b returns a logical TRUE/FALSE of whether the value of a equals the value of b
+## a = b assigns the value of b to a
+```{r}
+a = 3
+b = 2
+a == b # if a==b ?
+
+a = b   # assign the value fo b to a
+print(a)
+print(b)
+a == b   # if a == b ?
+
+```
+
+
+## Code Chunk 7
+## Data Manipulation: Order
+## Use arrange(data, attribute 1, attribute 2) to order data on some attributes
+## Suppose you want to see flights ordered by the departure delay
+## Order flights by ascending dep_delay
+```{r}
+arrange(flights,dep_delay)  # ascending order by default, see the result
+flights = arrange(flights,dep_delay)  # overwrite flights with the ordered data.frame
+```
+
+
+## Code Chunk 8
+## Order flights by descending dep_delay
+```{r}
+arrange(flights,desc(dep_delay))  #use desc() to specify decending order
+```
+
+
+## Code Chunk 9
+## Data will first be ordered by attribute 1 then by attribute 2
+## Order flights with multiple attributes: month/day/dep_delay
+```{r}
+arrange(flights,month,day,desc(dep_delay))  #ordering by multiple attributes
+```
+
+
+## Code Chunk 10
+## Data Manipulation: Select
+## Often you work with large datasets with many columns but only a few are actually of interest to you
+## Use select(data, attribute 1,attribute 2) to get attributes of interest
+```{r}
+select(flights, year, month, day, carrier)
+```
+
+
+## Code Chunk 11
+## Data Manipulation: Adding New column with existing columns
+## Add new columns that are functions of existing columns with mutate(data, new attribute = f(existing attributes)) 
+## Suppose you want to calculate the speed of each flights
+```{r}
+flights = mutate(flights, speed = distance/air_time*60, 
+                total_delay = dep_delay + arr_delay) # mutate keeps the original columns 
+flights$speed[1:10] # the first 10 rows of speed
+flights$total_delay[1:10] # the first 10 rows of total delay
+```
+
+
+## Code Chunk 12
+## Data Manipulation: Summarise
+## Want to get some specific statistics of different attributes at the same time
+## Use summarise(data,summarystat1 = FUN(attribute1), summarystat2 = FUN(attribute2))
+## FUN: min(),max(),sum(),sd(),n(),n_distinct()
+## n() count the number of an attribute
+## n_distinct() count the number of unique values of an attribute
+```{r}
+summarise(flights,max(speed,na.rm=TRUE),
+                  max(arr_delay,na.rm=TRUE),
+                  max(distance,na.rm=TRUE),
+                  min(distance,na.rm=TRUE),
+                  n_distinct(dest))
+```
+
+
+## Code Chunk 13
+## Suppose you want to know the maximum dep_delay and minimum dep_delay for all the flights in January
+## use filter() to get all the flights of January
+## use summarise() on the subset of data returned by filter
+```{r}
+x=filter(flights,month==1) # create a temporary data x
+summarise(x,max(dep_delay,na.rm=TRUE)
+          ,min(dep_delay,na.rm=TRUE)) # calculate the max and mean on the temporary data x
+```
+
+## Code Chunk 14
+## With pipe operator
+## Pipe operator %>% is used to chain code together
+## Pass the return from filter() directly to summarise
+## do not need to create temporary data x
+```{r}
+filter(flights,month==1) %>%
+summarise(max(dep_delay,na.rm=TRUE),
+          min(dep_delay,na.rm=TRUE))
+```
+
+## Quick Summary
+## Syntax structure in dplyr
+## The first argument is a data frame.
+## The subsequent arguments describe what to do with the data frame
+## The return is a new data frame
+
+
+## Data Analysis: Grouping and Aggregating
+## We want to know the average departure delay for each origin and the total number of flights from the origin
+## Group "flights" by attribute "origin" 
+## Calculate average dep_delay for each group
+## Count total number of flights for each group
+## Create a new data.frame, each row stores the average dep_delay & total number of flights for each origin
+## In dplyr
+## group_by(attribute1,attribute2,...): splits the dataset to sub groups by attribute1,attribute2 ...
+## aggregate functions: min(), max(), mean(), sum(), sd(), median(),n(),n_distinct()
+## summarise() does aggregation on each group 
+## group_by() & summarise() returns a new data.frame,each row is the aggregation stats of one group
+
+## Code Chunk 15
+## Data Analysis: Grouping and Aggregating
+## Combination of group_by() & summarise()
+## Use the pipe operator %>% 
+```{r}
+delay_origin_summary = flights %>% 
+                        group_by(origin)  %>% 
+                         summarise(
+                         avg_delay = mean(dep_delay,na.rm = TRUE), 
+                         flights = n()
+                        )
+delay_origin_summary 
+```
+
+## Quick Summary: Grouping and Aggregating
+## Always three parts in grouping analysis
+## Attributes to group on: How to subset the dataset into pieces?
+## Attributes to aggregate on: For each piece, what do I want to analyze?
+## The method of aggregations: What kind of measure do I want, mean(), max(), etc
+
+
+
+## Code Chunk 16
+## Date Object Manipulation
+## We will often deal with dates as business analysts
+## Raw date data is mostly "character"
+## We use "lubridate" package to clean the raw date data easily
+```{r}
+now = "2025-08-01 10:10:00"
+class(now)
+```
+
+
+## Code Chunk 17
+## Use ymd(),ymd_hms() to transform character to a date object,POSIXt in R
+```{r}
+now = ymd_hms(now)
+class(now)
+print(now)
+```
+
+
+## Code Chunk 18
+## Date Object Manipulation
+## Extract information from Date object
+```{r}
+year(now)
+```
+
+
+## Code Chunk 19
+```{r}
+weekdays(now)
+```
+
+## Code Chunk 20
+## Get the weekdays from the time_hour column of flights
+## Get total number of flights on different days
+```{r}
+flights$weekday=weekdays(ymd_hms(flights$time_hour))
+table(flights$weekday) 
+```
+
+
+## Plot with ggplot
+## Why ggplot?
+## Flexible mapping data to visualization objects
+## Construct a plot of multiple elements
+## points
+## line
+## bar
+## title
+## Each element is a layer and could be added up like layers in Photoshop
+## Grouping could be achieved by color
+
+## Basic building blocks of ggplot
+## Data
+## Aesthetic mapping: x,y,color...
+## Geometic Objects: points,lines,bars...
+
+
+
+## Code Chunk 21  
+## Plot with ggplot: Bar plot 
+## Plot the count of flights for each carrier with
+## data: flights
+## x: carrier
+## geom_bar()
+  
+```{r}
+ggplot(flights) + geom_bar(aes(x = carrier)) 
+# first parse the data flights to ggplot
+# then tell geom_bar you want to group on carrier 
+```
+
+
+## Code Chunk 22
+## You want to know the count of flights for each carrier on each origin
+```{r}
+ggplot(flights) + geom_bar(aes(x = carrier,fill=origin))  
+# "x=carrier" tells ggplot to count the number of flights for each carrier
+# "fill = origin" tells ggplot to fill the color by origin
+```
+
+## Code Chunk 23
+## You want to add a titile to your plot
+```{r}
+ggplot(flights) + geom_bar(aes(x = carrier,fill=origin)) + labs(title ="Flights by Carriers & Airport in New York City")
+# use labs() to change lables to your plot, like x,y,title...
+```
+
+
+
+## Code Chunk 24
+## Plot with ggplot: Scatter plot 
+## Plot the relationship between distance & air_time with geom_point()
+## data:flights
+## x: distance
+## y: air_time
+## plot type: point
+```{r}
+ggplot(flights) + geom_point(aes(x=distance,y=air_time))
+```
+
+
+
+[ggplot2 cheat sheat](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf "ggplot2 cheatsheat")
+
+

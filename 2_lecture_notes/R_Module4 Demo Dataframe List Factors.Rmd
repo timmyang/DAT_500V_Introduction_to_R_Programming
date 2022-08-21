@@ -1,0 +1,332 @@
+---
+title: "Untitled"
+author: "DuraiSundaramoorthi"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Data.frame 
+## Code Chunk 1
+## Example: a Built-in Data Frame
+## See the description of a built-in data.frame mtcars
+```{r}
+help(mtcars) 
+```
+
+## Code Chunk 2
+## Use head() to print the first several cars
+```{r}
+head(mtcars,2) # see the first 2 rows
+```
+
+## Code Chunk 3
+## Use tail() to print the last several cars
+```{r}
+tail(mtcars,2) # see the last 2 rows
+```
+
+## Code Chunk 4
+## colnames(),rownames(),nrow(),ncol() to check a data.frame
+```{r}
+colnames(mtcars) # names of columns
+rownames(mtcars) # name of rows
+ncol(mtcars) # number of columns
+nrow(mtcars) # number of rows
+```
+
+## Code Chunk 5
+## Creating a data.frame object
+## Use the data.frame() constructor to create a dataframe object with a collection of vectors
+## Each vector is one attribute of the data, takes one column
+## Each column should have same length 
+## Use as.data.frame() to tranform other data types to data.frame
+```{r}
+name = c("Messi","Ronaldo","Neymar") # a character vector
+age = c(32,34,27) # a numeric vector
+golden_ball = c(TRUE,TRUE,FALSE)
+players = data.frame(name,age,golden_ball)
+head(players)
+```
+
+
+## Code Chunk 6
+## Columns of different length is not taken by data.frame
+```{r}
+golden_ball = c(TRUE,TRUE) # golden ball has one missing value
+length(name) # length is 3
+length(golden_ball) # length is two
+data.frame(name,golden_ball) # data frame do not accept columns of different lengths
+```
+
+
+## Code Chunk 7
+## Use NA to place missing value
+```{r}
+golden_ball = c(TRUE,TRUE,NA) # use NA to indicate missing value 
+data.frame(name,age,golden_ball) 
+```
+
+## Code Chunk 8
+## as.data.frame() coerce to data.frame
+```{r}
+m = matrix(1:6,nrow=2,ncol=3)
+class(m)
+m
+m = as.data.frame(m)
+class(m)
+m
+```
+
+## Code Chunk 9
+## Accesing data from a data.frame
+## This can be done using the same access operators for matrix objects [row,column]
+## The 1st row
+```{r}
+players[1,]
+```
+
+## Code Chunk 10
+## The 2nd column
+```{r}
+players[,2]
+```
+
+## Code Chunk 11
+## The first 2 rows
+```{r}
+players[1:2,]
+```
+
+## Code Chunk 12
+## The first 2 columns
+```{r}
+players[,1:2]
+```
+
+
+## Code Chunk 13
+## Particular columns of the data.frame object can be accessed with the $ access operator followed by the column name
+## The name column of the data.frame players
+```{r}
+players$name
+```
+
+## Code Chunk 14
+## The second element of the name column
+```{r}
+players$name[2]
+```
+
+## Code Chunk 15
+## Operations on data.frame
+## Change the value 
+```{r}
+players$age+2   # add 2 to all the element of the age column
+players$age[1] +3 # add 3 to the first element of the age column
+players$age
+```
+
+## Code Chunk 16
+## Add a new column with cbind()
+```{r}
+assists = c(9,8,3)
+players = cbind(players,assists) # add one column with cbind()
+players
+```
+
+## Code Chunk 17
+## Add a new column with $
+```{r}
+players$goals = c(20,30,10)  # add one column with $
+players
+```
+
+## Code Chunk 18
+## Add new row with rbind()
+```{r}
+new_player = data.frame(name = "Suarez", age = 32, golden_ball= FALSE, goals = 40,assists=4) # add a new row to existing data.frame
+rbind(players,new_player) 
+players=rbind(players,new_player)
+```
+
+
+## Code Chunk 19
+## Functions on data.frame
+## mean(),max(),hist()...functions work on all numeric columns, since each column is a vector
+```{r}
+mean(mtcars$mpg)
+max(mtcars$carb)
+hist(mtcars$mpg)
+```
+
+
+## Code Chunk 20
+## summary() returns summary statistics of each column
+```{r}
+summary(mtcars)
+summary(mtcars$mpg) # summary of a specific column
+```
+
+
+
+## Code Chunk 21 
+## List
+## A list is a generic vector containing any other objects.
+## Use list() to construct
+```{r}
+my_list = list(players,c(1,2,3),matrix(1:6,2,3))
+my_list
+```
+
+## Code Chunk 22
+## List
+## List: Reference & Sublist
+## Use [[n]] to refer each slice of a list
+```{r}
+my_list[[1]] # returns the object of the 1st member of my_list 
+class(my_list[[1]]) # it is a data.frame
+summary(my_list[[1]])
+```
+
+
+## Code Chunk 23
+## Use [n] to retrieve a sublist from a list
+```{r}
+my_list[1] # return a sublist 
+class(my_list[1])  # it is a list
+mean(my_list[1]) # my_list[1] is a list, mean() does not work on list
+```
+
+
+## Code Chunk 24
+## use [n1:n2],[c()] to get a sublist of multiple members
+```{r}
+my_list[2:3]
+my_list[c(1,3)]
+```
+
+
+## Code Chunk 25
+## Class is really important in R
+```{r}
+my_list[[2]] # a vector
+class(my_list[[2]]) # class is numeric
+mean(my_list[[2]]) # mean() works on vector
+my_list[2]  # a list 
+class(my_list[2]) # class is list 
+mean(my_list[2])  # mean() does not work on list
+```
+
+
+## Code Chunk 26
+## Change a value of a member
+```{r}
+my_list[[3]]
+my_list[[3]] = matrix(1:6,3,2)
+my_list[[3]]
+```
+
+
+## Code Chunk 27
+## Add new member to a list
+```{r}
+my_list[[4]] = runif(5)
+my_list[[4]]
+```
+
+
+## Code Chunk 28
+## Delete a member from a list
+```{r}
+my_list[[4]]= NULL
+my_list[[4]] # the 4th element is already deleted
+```
+
+
+## Code Chunk 29
+## Use length() to access the number of members in a list
+```{r}
+length(my_list)
+```
+
+
+## Code Chunk 30
+## Factor 
+## Why we use factors
+## Demo:Factor 
+## Create a character vector
+```{r}
+direction = c("North","West","North","East","South","West","North","South") #create a character vector
+direction
+class(direction)
+```
+
+
+## Code Chunk 31
+## Use factor() to transform a vector to factor 
+```{r}
+factor_direction = factor(direction)  # create a factor of direction
+factor_direction
+class(factor_direction)
+```
+
+
+## Code Chunk 32
+## Use levels() to access the unique value of a factor
+```{r}
+levels(factor_direction)
+```
+
+## Code Chunk 33
+## Use table() to count the instances for each factor
+```{r}
+table(factor_direction)
+```
+
+
+## Code Chunk 34
+## Create an ordered factor
+```{r}
+seasons = c("Spring","Fall","Summer","Spring","Fall","Winter","Winter")
+factor_seasons = factor(seasons,levels=c("Spring","Summer","Fall","Winter"),ordered = TRUE)
+factor_seasons[1] < factor_seasons[2] 
+factor_seasons[2] < factor_seasons[3]
+```
+
+## Code Chunk 35
+## Create a factor from continous value with cut()
+## women is a built in data.frame of height&weight of women
+```{r}
+head(women)
+```
+
+
+## Code Chunk 36
+## Let's look at the height of women
+```{r}
+women$height
+```
+
+## Code Chunk 37
+## We want to create a factor corresponding to height, with three equally-spaced levels
+```{r}
+factor_height= cut(women$height,3)
+table(factor_height)
+```
+
+## Code Chunk 38
+## Use labels=argument in cut() to specify the levels of factors
+```{r}
+factor_height= cut(women$height,3,labels=c('Low','Medium','High'))
+table(factor_height)
+```
+

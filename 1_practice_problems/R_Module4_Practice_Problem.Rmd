@@ -1,0 +1,88 @@
+---
+title: "R_Module4_Practice_Problem"
+output: html_document
+date: '2022-08-20'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## R-Class Module 4 Practice Problem 1
+
+#### 1. Create a data.frame called running with the following data
+```{r}
+running <- data.frame(Name = c("Sally", "Mike", "Carol"), Gender = c("F", "M", "F"), TenK = c(55, 46, 62), PR = c(52, 44, 58), Qualified = c(FALSE, TRUE, FALSE))
+running
+```
+
+#### 2. Add the following column to running
+```{r}
+running$HalfMarathon = c(120, 100, 140)
+running
+```
+
+#### 3. Add the following row to running
+```{r}
+newRow = data.frame(Name = "Sage", Gender = "M", TenK = 40, PR = 42, Qualified = TRUE, HalfMarathon = 81)
+running <- rbind(running, newRow)
+running
+```
+
+## R-Class Module 4 Practice Problem 2
+
+#### 1. Create a list new_list with the following members
+
+- 1st member: a vector of length 10 from uniform distribution from -2 to 2  
+- 2nd member: a matrix from 1:10, with 2 rows, 5 columns, fill by row
+- 3rd member: the running data.frame
+```{r}
+new_list <- list(runif(10, -2, 2), matrix(1:10, 2, 5, byrow = TRUE), running)
+new_list
+```
+
+#### 2. Add 2 to each element of the first member of new_list
+```{r}
+new_list[[1]] + 2
+```
+
+#### 3. Calculate the sum of the 2nd member of new_list
+```{r}
+sum(new_list[[2]])
+```
+
+#### 4. Remove the 3rd member of new_list
+```{r}
+new_list[[3]] = NULL
+new_list
+```
+
+
+## R-Class Module 4 Practice Problem 3
+
+#### 1. Create  a  ordered  factor  mons  from  the  following  character  vector: 
+c(“March”,“April”,“January”,“November”,“January”,“September”,“Octo
+ber”,“September”,“November”,“August”,“January”,“November”,“Nove
+mber”,“February”,“May”,““July”,“December”,“August”,“August”,“Septe
+mber”,“November”, “February”,“April”)
+```{r}
+mons <- c("March","April","January","November","January","September","October","September","November","August","January","November","November","February","May","July","December","August","August","September","November","February","April")
+factor(mons, levels = c("January", "February", "March","April", "May", "June", "July", "August", "September", "October", "November","December"), ordered = TRUE)
+```
+
+#### 2. Count the occurrence of each month
+```{r}
+table(mons)
+```
+
+#### 3. Create a factor factor_weight with the weight of women of 2 levels
+```{r}
+head(women)
+factor_weight <- cut(women$weight, 2, labels = c("Low", "High"))
+```
+
+#### 4. Assign levels of “Low” and “High” to the factor 
+```{r}
+table(factor_weight)
+```
