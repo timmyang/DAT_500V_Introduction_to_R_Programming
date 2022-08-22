@@ -1,7 +1,6 @@
 ---
 title: "R_Module5_Practice_Problem"
-output: html_document
-date: '2022-08-20'
+output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
